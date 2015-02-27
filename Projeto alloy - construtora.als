@@ -26,13 +26,13 @@ sig EngenheiroCivil, EngenheiroEletrico extends Engenheiros{}
 sig EquipePintores{}
 
 --------------------------------------------------------------------------------------
---   Atributos das assinaturas        (2)                  --                                                      
+--   ATRIBUTOS DAS ASSINATURAS        (2)                  --                                                      
 --------------------------------------------------------------------------------------
 sig Nome{}
 sig Estado{}
 
 --------------------------------------------------------------------------------------
---   Predicados        (2)                  --                                                      
+--   PREDICADOS        (4)                  --                                                      
 --------------------------------------------------------------------------------------
 pred construtoraTem3Contratos[]{
 	all c:Construtora | #co.contratos = 3
@@ -48,4 +48,14 @@ pred construtoraTem2Engenheiros[]{
 
 pred construtoraTem1EquipeDePintores[]{
 	all c:Construtora | #epi.equipePintores = 1
+}
+
+--------------------------------------------------------------------------------------
+--   FATOS        (4)                  --                                                      
+--------------------------------------------------------------------------------------
+fact EspecificacaoDaConstrutora{
+	construtoraTem3Contratos
+	construtoraTem4EquipesDePedreiros
+	construtoraTem2Engenheiros
+	construtoraTem1EquipeDePintores
 }
