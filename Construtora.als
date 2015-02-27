@@ -8,25 +8,29 @@ sig Time {}
 --   ASSINATURAS      (Definindo as Assinaturas do Modelo)          (11)                  --                                                      
 --------------------------------------------------------------------------------------
 one sig Construtora{
-	cidade: one Cidade,
 	contratos: set Contrato,
 	equipePedreiros: set EquipePredeiros,
 	engenheiros: set Engenheiros,
 	equipePintores: one EquipePintores
 }
 
-sig Cidade{
+one sig Cidade{
 	nome: one Nome,
-	estado: one Estado
+	estado: one Estado,
+	construtora: set Construtora
 }
 
 sig Contrato{
-	equipePedreirosContrato: set EquipePredeiros,
-	engenheirosContrato: set Engenheiros,
-	equipePintoresContrato: one EquipePintores
+	construcao: one Construcao
 }
 
-sig Predio, CondominioPopular, EstadioFutebol extends Contrato{}
+abstract sig Construcao{
+	equipePedreirosContrato: one EquipePredeiros,
+	engenheirosContrato: set Engenheiros,
+	equipePintoresContrato: lone EquipePintores
+}
+
+one sig Predio, CondominioPopular, EstadioFutebol extends Construcao{}
 
 sig EquipePredeiros{}
 
@@ -43,7 +47,7 @@ sig Estado{}
 --------------------------------------------------------------------------------------
 --   PREDICADOS        (4)                  --                                                      
 --------------------------------------------------------------------------------------
--- QUATIDADES
+-- QUATIDADES ATRIBUTOS CONSTRUTORA
 pred construtoraTem3Contratos[]{
 	all c:Construtora | #c.contratos = 3
 }
@@ -60,18 +64,54 @@ pred construtoraTem1EquipeDePintores[]{
 	all c:Construtora | #c.equipePintores = 1
 }
 
+-- QUATIDADES ATRIBUTOS CONTRATO
+pred construtoraContratoTem4EquipesDePedreiros[]{
+	all c:Construcao | #c.equipePedreirosContrato = 4
+}
+
+pred construtoraContratoTem2Engenheiros[]{
+	all c:Construcao | #c.engenheirosContrato = 2
+}
+
+pred construtoraContratoTem1EquipeDePintores[]{
+	all c:Construcao | #c.equipePintoresContrato = 1
+}
+
+--OBRA
+pred predioTemPeloMenos1EquipeDePredeiros[]{
+	all p:Predio | #p.equipePedreirosContrato > 0
+}
+
+pred condominioPopularTemPeloMenos1EquipeDePredeiros[]{
+	all c:CondominioPopular | #c.equipePedreirosContrato > 0
+}
+
+pred estadioFutebolTemPeloMenos1EquipeDePredeiros[]{
+	all e:EstadioFutebol | #e.equipePedreirosContrato > 0
+}
+
 --TEMPO
 pred init[t: Time]{
 }
 
+--RUN
+pred show[]{}
+
 --------------------------------------------------------------------------------------
 --   FATOS        (4)                  --                                                      
 --------------------------------------------------------------------------------------
+
 fact EspecificacaoDaConstrutora{
 	construtoraTem3Contratos
 	construtoraTem4EquipesDePedreiros
 	construtoraTem2Engenheiros
 	construtoraTem1EquipeDePintores
+}
+
+fact EspecificacaoDaContrato{
+	construtoraContratoTem4EquipesDePedreiros
+	construtoraContratoTem2Engenheiros
+	construtoraContratoTem1EquipeDePintores
 }
 
 fact engenheirosTrabalhamJuntos{
@@ -88,5 +128,10 @@ fact equipePintoresNaoTrabalhaComEngenheiros{
 	((ep in ef.equipePintoresContrato) and !(e in ef.equipePedreirosContrato))
 }
 
-pred show[]{}
+fact obrasComPeloMenosUmaEquipePredeiros{
+	predioTemPeloMenos1EquipeDePredeiros
+	condominioPopularTemPeloMenos1EquipeDePredeiros
+	estadioFutebolTemPeloMenos1EquipeDePredeiros
+}
+
 run show for 10
