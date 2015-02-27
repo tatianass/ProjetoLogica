@@ -81,5 +81,12 @@ fact engenheirosTrabalhamJuntos{
 	(!(e in p.engenheirosContrato) and !(e in c.engenheirosContrato) and (e in ef.engenheirosContrato))
 }
 
+fact equipePintoresNaoTrabalhaComEngenheiros{
+	all ep:EquipePintores, e: Engenheiros, p: Predio, c: CondominioPopular, ef: EstadioFutebol |
+	((ep in p.equipePintoresContrato) and !(e in p.engenheirosContrato)) or
+	((ep in c.equipePintoresContrato) and !(e in c.engenheirosContrato)) or
+	((ep in ef.equipePintoresContrato) and !(e in ef.engenheirosContrato))
+}
+
 pred show[]{}
 run show for 10
