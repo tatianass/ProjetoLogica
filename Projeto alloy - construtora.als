@@ -30,3 +30,22 @@ sig EquipePintores{}
 --------------------------------------------------------------------------------------
 sig Nome{}
 sig Estado{}
+
+--------------------------------------------------------------------------------------
+--   Predicados        (2)                  --                                                      
+--------------------------------------------------------------------------------------
+pred construtoraTem3Contratos[]{
+	all c:Construtora | #co.contratos = 3
+}
+
+pred construtoraTem4EquipesDePedreiros[]{
+	all c:Construtora | #ep.equipePedreiros = 4
+}
+
+pred construtoraTem2Engenheiros[]{
+	all c:Construtora | #e.engenheiros = 2
+}
+
+pred construtoraTem1EquipeDePintores[]{
+	all c:Construtora | #epi.equipePintores = 1
+}
