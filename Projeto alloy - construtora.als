@@ -10,13 +10,23 @@ sig Construtora{
 	engenheiros: set Engenheiros
 	equipePintores: one EquipePintores
 }
-sig Cidade{}
-sig Contrato{}
-sig Predio extends Contrato{}
-sig CondominioPopular extends Contrato{}
-sig EstadioFutebol extends Contrato{}
+
+sig Cidade{
+	nome: one Nome
+	estado: one Estado
+}
+
+abstract sig Contrato{}
+sig Predio, CondominioPopular, EstadioFutebol extends Contrato{}
+
 sig EquipePredeiros{}
-sig Engenheiros{}
-sig EngenheiroCivil extends Engenheiros{}
-sig EngenheiroEletrico extends Engenheiros{}
+
+abstract sig Engenheiros{}
+sig EngenheiroCivil, EngenheiroEletrico extends Engenheiros{}
 sig EquipePintores{}
+
+--------------------------------------------------------------------------------------
+--   Atributos das assinaturas        (2)                  --                                                      
+--------------------------------------------------------------------------------------
+sig Nome{}
+sig Estado{}
