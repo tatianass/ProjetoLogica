@@ -1,5 +1,8 @@
+open util/ordering[Time] as to
 
 module Construtora
+
+sig Time {}
 
 --------------------------------------------------------------------------------------
 --   ASSINATURAS      (Definindo as Assinaturas do Modelo)          (11)                  --                                                      
@@ -14,7 +17,7 @@ sig CampinaGrande extends Cidade{
 
 sig Construtora{
 	contratos: set Contrato,
-	equipesPedreiros: set EquipePedreiros
+	equipesPedreiros: EquipePedreiros set -> Time
 }
 
 sig Contrato{
@@ -22,12 +25,13 @@ sig Contrato{
 }
 
 abstract sig Construcao{
-	equipePedreiros: one EquipePedreiros
+	equipePedreiros:  EquipePedreiros one -> Time
 }
 
 sig Predio, CondominioPopular, EstadioFutebol extends Construcao{}
 
-sig EquipePedreiros{}
+sig EquipePedreiros{
+}
 
 --PREDICADOS
 pred todoContratoTemUmaConstrutora[]{
@@ -47,9 +51,11 @@ pred todaEquipeDePedreirosDaConstrucaoEstaNaConstrutora[]{
 	(cons.equipePedreiros in c.equipesPedreiros)
 }
 
-pred todaEquipeDePredeirosEstaNaConstrutora[]{
+pred todaEquipeDePredeirosEstaNaConstrutora[t: Time]{
 	all c: Construtora, ep: EquipePedreiros | 
-	(ep in c.equipesPedreiros)
+	(ep in c.equipesPedreiros.t)
+}
+pred init[t: Time]{
 }
 
 --FATOS
@@ -65,7 +71,8 @@ fact especificacoes{
 	todoContratoSoTemUmaConstrucaoUnica
 	todoConstrucaoSoTemUmaEquipeDePedreirosUnica
 	todaEquipeDePedreirosDaConstrucaoEstaNaConstrutora
-	todaEquipeDePredeirosEstaNaConstrutora
+	all t: Time | todaEquipeDePredeirosEstaNaConstrutora[t]
+	init[Time]
 }
 
 pred show[]{}
