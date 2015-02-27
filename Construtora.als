@@ -1,4 +1,8 @@
+open util/ordering[Time] as to
+
 module Construtora
+
+sig Time {}
 
 --------------------------------------------------------------------------------------
 --   ASSINATURAS      (Definindo as Assinaturas do Modelo)          (11)                  --                                                      
@@ -54,6 +58,10 @@ pred construtoraTem2Engenheiros[]{
 
 pred construtoraTem1EquipeDePintores[]{
 	all c:Construtora | #c.equipePintores = 1
+}
+
+--TEMPO
+pred init[t: Time]{
 }
 
 --------------------------------------------------------------------------------------
