@@ -39,13 +39,32 @@ sig Estado{}
 --------------------------------------------------------------------------------------
 --   PREDICADOS        (4)                  --                                                      
 --------------------------------------------------------------------------------------
-
 -- QUATIDADES
+pred construtoraTem3Contratos[]{
+	all c:Construtora | #c.contratos = 3
+}
+
+pred construtoraTem4EquipesDePedreiros[]{
+	all c:Construtora | #c.equipePedreiros = 4
+}
+
+pred construtoraTem2Engenheiros[]{
+	all c:Construtora | #c.engenheiros = 2
+}
+
+pred construtoraTem1EquipeDePintores[]{
+	all c:Construtora | #c.equipePintores = 1
+}
 
 --------------------------------------------------------------------------------------
 --   FATOS        (4)                  --                                                      
 --------------------------------------------------------------------------------------
-
+fact EspecificacaoDaConstrutora{
+	construtoraTem3Contratos
+	construtoraTem4EquipesDePedreiros
+	construtoraTem2Engenheiros
+	construtoraTem1EquipeDePintores
+}
 
 fact engenheirosTrabalhamJuntos{
 	all e:Engenheiros, p: Predio, c: CondominioPopular, ef: EstadioFutebol |
@@ -55,4 +74,4 @@ fact engenheirosTrabalhamJuntos{
 }
 
 pred show[]{}
-run show for 2
+run show for 10
