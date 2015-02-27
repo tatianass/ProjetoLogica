@@ -82,10 +82,10 @@ fact engenheirosTrabalhamJuntos{
 }
 
 fact equipePintoresNaoTrabalhaComEngenheiros{
-	all ep:EquipePintores, e: Engenheiros, p: Predio, c: CondominioPopular, ef: EstadioFutebol |
-	((ep in p.equipePintoresContrato) and !(e in p.engenheirosContrato)) or
-	((ep in c.equipePintoresContrato) and !(e in c.engenheirosContrato)) or
-	((ep in ef.equipePintoresContrato) and !(e in ef.engenheirosContrato))
+	all ep:EquipePintores, e: EquipePredeiros, p: Predio, c: CondominioPopular, ef: EstadioFutebol |
+	((ep in p.equipePintoresContrato) and !(e in p.equipePedreirosContrato)) or
+	((ep in c.equipePintoresContrato) and !(e in c.equipePedreirosContrato)) or
+	((ep in ef.equipePintoresContrato) and !(e in ef.equipePedreirosContrato))
 }
 
 pred show[]{}
