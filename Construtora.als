@@ -47,5 +47,12 @@ sig Estado{}
 --------------------------------------------------------------------------------------
 
 
+fact engenheirosTrabalhamJuntos{
+	all e:Engenheiros, p: Predio, c: CondominioPopular, ef: EstadioFutebol |
+	((e in p.engenheirosContrato) and !(e in c.engenheirosContrato) and !(e in ef.engenheirosContrato)) or
+	(!(e in p.engenheirosContrato) and (e in c.engenheirosContrato) and !(e in ef.engenheirosContrato)) or
+	(!(e in p.engenheirosContrato) and !(e in c.engenheirosContrato) and (e in ef.engenheirosContrato))
+}
+
 pred show[]{}
 run show for 2
