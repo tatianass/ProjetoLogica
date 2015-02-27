@@ -16,7 +16,12 @@ sig Cidade{
 	estado: one Estado
 }
 
-abstract sig Contrato{}
+sig Contrato{
+	equipePedreirosContrato: set EquipePredeiros
+	engenheirosContrato: set Engenheiros
+	equipePintoresContrato: one EquipePintores
+}
+
 sig Predio, CondominioPopular, EstadioFutebol extends Contrato{}
 
 sig EquipePredeiros{}
@@ -34,6 +39,8 @@ sig Estado{}
 --------------------------------------------------------------------------------------
 --   PREDICADOS        (4)                  --                                                      
 --------------------------------------------------------------------------------------
+
+-- QUATIDADES
 pred construtoraTem3Contratos[]{
 	all c:Construtora | #co.contratos = 3
 }
@@ -50,6 +57,10 @@ pred construtoraTem1EquipeDePintores[]{
 	all c:Construtora | #epi.equipePintores = 1
 }
 
+--
+pred engenheirosTrabalhamJuntos[]{
+	all e:Engenheiros, co.Contrato | e in one co
+}
 --------------------------------------------------------------------------------------
 --   FATOS        (4)                  --                                                      
 --------------------------------------------------------------------------------------
@@ -58,4 +69,5 @@ fact EspecificacaoDaConstrutora{
 	construtoraTem4EquipesDePedreiros
 	construtoraTem2Engenheiros
 	construtoraTem1EquipeDePintores
+	engenheirosTrabalhamJuntos
 }
