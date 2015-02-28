@@ -82,10 +82,10 @@ pred todaEquipeDeEngenheirosTem2Engenheiros[]{
 	all e: EquipeEngenheiros | #e.engenheiros = 2
 }
 
-pred todaEquipeDeEngenheirosTemUmEletricistaECivil[]{
+/*pred todaEquipeDeEngenheirosTemUmEletricistaECivil[]{
 	all e1: EquipeEngenheiros, e2: EngenheiroEletricista, e3: EngenheiroCivil | 
 	(e2 + e3) = e1.engenheiros
-}
+}*/
 
 pred umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t: Time]{
 	all c1, c2: Construcao | 
@@ -107,12 +107,14 @@ fact especificacoes{
 	#EstadioFutebol = 1
 	#EquipePedreiros = 4
 	#Engenheiro = 2
+	#EngenheiroEletricista = 1
+	#EngenheiroCivil = 1
 	todoContratoTemUmaConstrutora
 	todoConstrucaoSoTemUmaEquipeDePedreirosUnica
 	todaEquipeDePedreirosDaConstrucaoEstaNaConstrutora
 	todaEquipePedreirosDevePassarEmTodasConstrucoes
 	todaEquipeDeEngenheirosTem2Engenheiros
-	todaEquipeDeEngenheirosTemUmEletricistaECivil
+	//todaEquipeDeEngenheirosTemUmEletricistaECivil
 	equipeEngenheirosPassamEmTodasConstrucoes
 	all t: Time | umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t]
 	all t: Time | todaEquipeDePredeirosEstaNaConstrutora[t]
