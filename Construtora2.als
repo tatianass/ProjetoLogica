@@ -69,6 +69,10 @@ pred todaEquipeDePedreiroEstaEmUmaUnicaConstrucao[t: Time]{
 	(e in c.equipePedreiros.t => (all co: Construcao - c | e !in co.equipePedreiros.t))
 }
 
+pred todaEquipePedreirosDevePassarEmTodasConstrucoes[]{
+	all c: Construcao, e: EquipePedreiros | some t: Time | e in c.equipePedreiros.t
+}
+
 pred todaConstrucaoTemUmContrato[t: Time]{
 	all c: Contrato, e: Construcao | 
 	(e in c.construcao.t => (all co: Contrato - c | e !in co.construcao.t))
@@ -78,17 +82,18 @@ pred todaEquipeDeEngenheirosTem2Engenheiros[]{
 	all e: EquipeEngenheiros | #e.engenheiros = 2
 }
 
-pred todaEquipeDeEngenheirosTemUmEletricista[]{
-	all e1: EquipeEngenheiros, e2: EngenheiroEletricista | e2 in e1.engenheiros
-}
-
-pred todaEquipeDeEngenheirosTemUmCivil[]{
-	all e1: EquipeEngenheiros, e2: EngenheiroCivil | e2 in e1.engenheiros
+pred todaEquipeDeEngenheirosTemUmEletricistaECivil[]{
+	all e1: EquipeEngenheiros, e2: EngenheiroEletricista, e3: EngenheiroCivil | 
+	(e2 + e3) = e1.engenheiros
 }
 
 pred umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t: Time]{
 	all c1, c2: Construcao | 
 	(c1 != c2 and  #c1.equipeEngenheiros.t = 1) => (#c2.equipeEngenheiros.t = 0)
+}
+
+pred equipeEngenheirosPassamEmTodasConstrucoes{
+	 all c: Construcao, e: EquipeEngenheiros | some t: Time | e in c.equipeEngenheiros.t
 }
 
 pred init[t: Time]{
@@ -105,9 +110,10 @@ fact especificacoes{
 	todoContratoTemUmaConstrutora
 	todoConstrucaoSoTemUmaEquipeDePedreirosUnica
 	todaEquipeDePedreirosDaConstrucaoEstaNaConstrutora
+	todaEquipePedreirosDevePassarEmTodasConstrucoes
 	todaEquipeDeEngenheirosTem2Engenheiros
-	todaEquipeDeEngenheirosTemUmEletricista
-	todaEquipeDeEngenheirosTemUmCivil
+	todaEquipeDeEngenheirosTemUmEletricistaECivil
+	equipeEngenheirosPassamEmTodasConstrucoes
 	all t: Time | umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t]
 	all t: Time | todaEquipeDePredeirosEstaNaConstrutora[t]
 	all t: Time | todaEquipeDePedreiroEstaEmUmaUnicaConstrucao[t]
@@ -116,4 +122,4 @@ fact especificacoes{
 }
 
 pred show[]{}
-run show for 10
+run show for 4
