@@ -7,7 +7,7 @@ sig Time {}
 --------------------------------------------------------------------------------------
 --   ASSINATURAS      (Definindo as Assinaturas do Modelo)          (11)                  --                                                      
 --------------------------------------------------------------------------------------
-abstract sig Cidade{
+one abstract sig Cidade{
 	construtora: one Construtora
 
 }
@@ -15,9 +15,10 @@ abstract sig Cidade{
 sig CampinaGrande extends Cidade{
 }
 
-sig Construtora{
+one sig Construtora{
 	contratos: set Contrato,
-	equipesPedreiros: EquipePedreiros set -> Time
+	equipesPedreiros: EquipePedreiros set -> Time,
+	equipeEngenheiro: one EquipeEngenheiros
 }
 
 sig Contrato{
@@ -25,13 +26,24 @@ sig Contrato{
 }
 
 abstract sig Construcao{
-	equipePedreiros:  EquipePedreiros one -> Time
+	equipePedreiros:  EquipePedreiros one -> Time,
+	equipeEngenheiros: EquipeEngenheiros lone -> Time
 }
 
 sig Predio, CondominioPopular, EstadioFutebol extends Construcao{}
 
 sig EquipePedreiros{
 }
+
+one sig EquipeEngenheiros{
+	engenheiros: some Engenheiro
+}
+
+abstract sig Engenheiro{}
+
+sig EngenheiroEletricista extends Engenheiro{}
+
+sig EngenheiroCivil extends Engenheiro{}
 
 --PREDICADOS
 pred todoContratoTemUmaConstrutora[]{
@@ -62,21 +74,41 @@ pred todaConstrucaoTemUmContrato[t: Time]{
 	(e in c.construcao.t => (all co: Contrato - c | e !in co.construcao.t))
 }
 
+pred todaEquipeDeEngenheirosTem2Engenheiros[]{
+	all e: EquipeEngenheiros | #e.engenheiros = 2
+}
+
+pred todaEquipeDeEngenheirosTemUmEletricista[]{
+	all e1: EquipeEngenheiros, e2: EngenheiroEletricista | e2 in e1.engenheiros
+}
+
+pred todaEquipeDeEngenheirosTemUmCivil[]{
+	all e1: EquipeEngenheiros, e2: EngenheiroCivil | e2 in e1.engenheiros
+}
+
+pred umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t: Time]{
+	all c1, c2: Construcao | 
+	(c1 != c2 and  #c1.equipeEngenheiros.t = 1) => (#c2.equipeEngenheiros.t = 0)
+}
+
 pred init[t: Time]{
 }
 
 --FATOS
 fact especificacoes{
-	#Cidade = 1
-	#Construtora = 1
 	#Contrato = 3
 	#Predio = 1
 	#CondominioPopular = 1
 	#EstadioFutebol = 1
 	#EquipePedreiros = 4
+	#Engenheiro = 2
 	todoContratoTemUmaConstrutora
 	todoConstrucaoSoTemUmaEquipeDePedreirosUnica
 	todaEquipeDePedreirosDaConstrucaoEstaNaConstrutora
+	todaEquipeDeEngenheirosTem2Engenheiros
+	todaEquipeDeEngenheirosTemUmEletricista
+	todaEquipeDeEngenheirosTemUmCivil
+	all t: Time | umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t]
 	all t: Time | todaEquipeDePredeirosEstaNaConstrutora[t]
 	all t: Time | todaEquipeDePedreiroEstaEmUmaUnicaConstrucao[t]
 	all t: Time | todaConstrucaoTemUmContrato[t]
