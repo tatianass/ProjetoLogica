@@ -18,7 +18,8 @@ sig CampinaGrande extends Cidade{
 one sig Construtora{
 	contratos: set Contrato,
 	equipesPedreiros: EquipePedreiros set -> Time,
-	equipeEngenheiro: one EquipeEngenheiros
+	equipeEngenheiro: one EquipeEngenheiros,
+	equipePintores: one EquipePintores
 }
 
 sig Contrato{
@@ -27,12 +28,16 @@ sig Contrato{
 
 abstract sig Construcao{
 	equipePedreiros:  EquipePedreiros one -> Time,
-	equipeEngenheiros: EquipeEngenheiros lone -> Time
+	equipeEngenheiros: EquipeEngenheiros lone -> Time,
+	equipePintores: EquipePintores lone -> Time
 }
 
 sig Predio, CondominioPopular, EstadioFutebol extends Construcao{}
 
 sig EquipePedreiros{
+}
+
+one sig EquipePintores{
 }
 
 one sig EquipeEngenheiros{
@@ -82,11 +87,6 @@ pred todaEquipeDeEngenheirosTem2Engenheiros[]{
 	all e: EquipeEngenheiros | #e.engenheiros = 2
 }
 
-/*pred todaEquipeDeEngenheirosTemUmEletricistaECivil[]{
-	all e1: EquipeEngenheiros, e2: EngenheiroEletricista, e3: EngenheiroCivil | 
-	(e2 + e3) = e1.engenheiros
-}*/
-
 pred umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t: Time]{
 	all c1, c2: Construcao | 
 	(c1 != c2 and  #c1.equipeEngenheiros.t = 1) => (#c2.equipeEngenheiros.t = 0)
@@ -94,6 +94,19 @@ pred umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t: Time]{
 
 pred equipeEngenheirosPassamEmTodasConstrucoes{
 	 all c: Construcao, e: EquipeEngenheiros | some t: Time | e in c.equipeEngenheiros.t
+}
+
+pred umaEquipePintoresTrabalhaEmUmaContrucaoPorVez[t: Time]{
+	all c1, c2: Construcao | 
+	(c1 != c2 and  #c1.equipePintores.t = 1) => (#c2.equipePintores.t = 0)
+}
+
+pred equipePintoresPassamEmTodasConstrucoes{
+	 all c: Construcao, e: EquipePintores | some t: Time | e in c.equipePintores.t
+}
+
+pred aEquipePintoresNaoTrabalhaNaMesmaConstrucaoDaEquipeEngenheiros[t: Time] {
+	all c: Construcao | (#c.equipeEngenheiros.t = 1) => (#c.equipePintores.t = 0)
 }
 
 pred init[t: Time]{
@@ -109,14 +122,17 @@ fact especificacoes{
 	#Engenheiro = 2
 	#EngenheiroEletricista = 1
 	#EngenheiroCivil = 1
+	
 	todoContratoTemUmaConstrutora
 	todoConstrucaoSoTemUmaEquipeDePedreirosUnica
 	todaEquipeDePedreirosDaConstrucaoEstaNaConstrutora
 	todaEquipePedreirosDevePassarEmTodasConstrucoes
 	todaEquipeDeEngenheirosTem2Engenheiros
-	//todaEquipeDeEngenheirosTemUmEletricistaECivil
 	equipeEngenheirosPassamEmTodasConstrucoes
+	equipePintoresPassamEmTodasConstrucoes
+	all t:Time | aEquipePintoresNaoTrabalhaNaMesmaConstrucaoDaEquipeEngenheiros[t]
 	all t: Time | umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t]
+	all t: Time | umaEquipePintoresTrabalhaEmUmaContrucaoPorVez[t]
 	all t: Time | todaEquipeDePredeirosEstaNaConstrutora[t]
 	all t: Time | todaEquipeDePedreiroEstaEmUmaUnicaConstrucao[t]
 	all t: Time | todaConstrucaoTemUmContrato[t]
