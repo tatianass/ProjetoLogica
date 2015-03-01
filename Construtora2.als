@@ -109,6 +109,14 @@ pred aEquipePintoresNaoTrabalhaNaMesmaConstrucaoDaEquipeEngenheiros[t: Time] {
 	all c: Construcao | (#c.equipeEngenheiros.t = 1) => (#c.equipePintores.t = 0)
 }
 
+pred equipeEngenheirosSempreTrabalha[t: Time]{
+	some c1, c2, c3: Construcao | 	(c1 != c2 and c1 != c3 and c2 != c3) and (#c1.equipeEngenheiros.t = 1 or #c2.equipeEngenheiros.t = 1 or  #c3.equipeEngenheiros.t = 1)
+}
+
+pred equipePintoresSempreTrabalha[t: Time]{
+	some c1, c2, c3: Construcao | 	(c1 != c2 and c1 != c3 and c2 != c3) and (#c1.equipePintores.t = 1 or #c2.equipePintores.t = 1 or  #c3.equipePintores.t = 1)
+}
+
 pred init[t: Time]{
 }
 
@@ -136,6 +144,8 @@ fact especificacoes{
 	all t: Time | todaEquipeDePredeirosEstaNaConstrutora[t]
 	all t: Time | todaEquipeDePedreiroEstaEmUmaUnicaConstrucao[t]
 	all t: Time | todaConstrucaoTemUmContrato[t]
+	all t: Time | equipeEngenheirosSempreTrabalha[t]
+	all t: Time | equipePintoresSempreTrabalha[t]
 	init[Time]
 }
 
