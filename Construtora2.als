@@ -117,6 +117,10 @@ pred equipePintoresSempreTrabalha[t: Time]{
 	some c1, c2, c3: Construcao | 	(c1 != c2 and c1 != c3 and c2 != c3) and (#c1.equipePintores.t = 1 or #c2.equipePintores.t = 1 or  #c3.equipePintores.t = 1)
 }
 
+pred umContratoTemApenasUmaConstrucao[]{
+		all t1,t2: Time | all cont: Contrato | cont.construcao.t1 = cont.construcao.t2
+}
+
 pred init[t: Time]{
 }
 
@@ -138,6 +142,7 @@ fact especificacoes{
 	todaEquipeDeEngenheirosTem2Engenheiros
 	equipeEngenheirosPassamEmTodasConstrucoes
 	equipePintoresPassamEmTodasConstrucoes
+	umContratoTemApenasUmaConstrucao
 	all t:Time | aEquipePintoresNaoTrabalhaNaMesmaConstrucaoDaEquipeEngenheiros[t]
 	all t: Time | umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t]
 	all t: Time | umaEquipePintoresTrabalhaEmUmaContrucaoPorVez[t]
