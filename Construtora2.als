@@ -110,11 +110,11 @@ pred aEquipePintoresNaoTrabalhaNaMesmaConstrucaoDaEquipeEngenheiros[t: Time] {
 }
 
 pred equipeEngenheirosSempreTrabalha[t: Time]{
-	some c1, c2, c3: Construcao | 	(c1 != c2 and c1 != c3 and c2 != c3) and (#c1.equipeEngenheiros.t = 1 or #c2.equipeEngenheiros.t = 1 or  #c3.equipeEngenheiros.t = 1)
+	 some c: Construcao | 	#c.equipeEngenheiros.t = 1
 }
 
 pred equipePintoresSempreTrabalha[t: Time]{
-	some c1, c2, c3: Construcao | 	(c1 != c2 and c1 != c3 and c2 != c3) and (#c1.equipePintores.t = 1 or #c2.equipePintores.t = 1 or  #c3.equipePintores.t = 1)
+	 some c: Construcao | 	#c.equipePintores.t = 1
 }
 
 pred umContratoTemApenasUmaConstrucao[]{
