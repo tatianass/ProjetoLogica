@@ -22,6 +22,12 @@ one sig Construtora{
 	equipePintores: one EquipePintores
 }
 
+assert construtoraTemTresEquipePedreiros {
+	all c: Construtora | all t: Time | #c.equipesPedreiros.t = 4
+}
+
+check construtoraTemTresEquipePedreiros for 4
+
 sig Contrato{
 	construcao: Construcao one -> Time
 }
@@ -32,10 +38,22 @@ abstract sig Construcao{
 	equipePintores: EquipePintores lone -> Time
 }
 
+
+assert construcaoTemSomenteUmaEquipePedreiros {
+	all c:Construcao |all t: Time | one c.equipePedreiros.t
+}
+
+check construcaoTemSomenteUmaEquipePedreiros for 4
+
 sig Predio, CondominioPopular, EstadioFutebol extends Construcao{}
 
-sig EquipePedreiros{
+sig EquipePedreiros{}
+
+assert equipePintoresNaoTrabalhaComEquipeEngenheiros{
+	all t: Time, c: Construcao | (#c.equipePintores.t = 1) => (#c.equipeEngenheiros.t = 0)
 }
+
+check equipePintoresNaoTrabalhaComEquipeEngenheiros for 4
 
 one sig EquipePintores{
 }
@@ -51,7 +69,7 @@ sig EngenheiroEletricista extends Engenheiro{}
 sig EngenheiroCivil extends Engenheiro{}
 
 --PREDICADOS
-pred todoContratoTemUmaConstrutora[]{
+pred construtoraTemTresContratos[]{
 	all c:Construtora | #c.contratos = 3
 }
 
@@ -117,7 +135,7 @@ pred equipePintoresSempreTrabalha[t: Time]{
 	 some c: Construcao | 	#c.equipePintores.t = 1
 }
 
-pred umContratoTemApenasUmaConstrucao[]{
+pred cadaContratoTemApenasUmaConstrucao[]{
 		all t1,t2: Time | all cont: Contrato | cont.construcao.t1 = cont.construcao.t2
 }
 
@@ -135,14 +153,14 @@ fact especificacoes{
 	#EngenheiroEletricista = 1
 	#EngenheiroCivil = 1
 	
-	todoContratoTemUmaConstrutora
+	construtoraTemTresContratos
 	todoConstrucaoSoTemUmaEquipeDePedreirosUnica
 	todaEquipeDePedreirosDaConstrucaoEstaNaConstrutora
 	todaEquipePedreirosDevePassarEmTodasConstrucoes
 	todaEquipeDeEngenheirosTem2Engenheiros
 	equipeEngenheirosPassamEmTodasConstrucoes
 	equipePintoresPassamEmTodasConstrucoes
-	umContratoTemApenasUmaConstrucao
+	cadaContratoTemApenasUmaConstrucao
 	all t:Time | aEquipePintoresNaoTrabalhaNaMesmaConstrucaoDaEquipeEngenheiros[t]
 	all t: Time | umaEquipeEngenheirosTrabalhaEmUmaContrucaoPorVez[t]
 	all t: Time | umaEquipePintoresTrabalhaEmUmaContrucaoPorVez[t]
