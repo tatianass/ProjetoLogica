@@ -22,12 +22,6 @@ one sig Construtora{
 	equipePintores: one EquipePintores
 }
 
-assert construtoraTemTresEquipePedreiros {
-	all c: Construtora | all t: Time | #c.equipesPedreiros.t = 4
-}
-
-check construtoraTemTresEquipePedreiros for 4
-
 sig Contrato{
 	construcao: Construcao one -> Time
 }
@@ -38,22 +32,9 @@ abstract sig Construcao{
 	equipePintores: EquipePintores lone -> Time
 }
 
-
-assert construcaoTemSomenteUmaEquipePedreiros {
-	all c:Construcao |all t: Time | one c.equipePedreiros.t
-}
-
-check construcaoTemSomenteUmaEquipePedreiros for 4
-
 sig Predio, CondominioPopular, EstadioFutebol extends Construcao{}
 
 sig EquipePedreiros{}
-
-assert equipePintoresNaoTrabalhaComEquipeEngenheiros{
-	all t: Time, c: Construcao | (#c.equipePintores.t = 1) => (#c.equipeEngenheiros.t = 0)
-}
-
-check equipePintoresNaoTrabalhaComEquipeEngenheiros for 4
 
 one sig EquipePintores{
 }
@@ -142,14 +123,84 @@ pred cadaContratoTemApenasUmaConstrucao[]{
 pred init[t: Time]{
 }
 
+
+--Funcoes
+fun contratosDaConstrutora[ c: Construtora]: 
+set Contrato {
+	c.contratos
+}
+
+fun equipeDePedreirosDaConstrutora[ c: 
+Construtora, t: Time]: set EquipePedreiros {
+	c.equipesPedreiros.t
+}
+
+fun equipeEngenheirosDaConstrutora[ c: 
+Construtora]: one EquipeEngenheiros {
+	c.equipeEngenheiro
+}
+
+fun equipePintoresDaConstrutora[ c: 
+Construtora]: one EquipePintores {
+	c.equipePintores
+}
+
+fun construcaoDoContrato[ c: Contrato, t: 
+Time]: one Construcao {
+	c.construcao.t
+}
+
+fun equipeDePedreirosDaConstrucao[ c: 
+Construcao, t: Time]: one EquipePedreiros {
+	c.equipePedreiros.t
+}
+
+fun equipeEngenheirosDaConstrucao[ c: 
+Construcao, t: Time]: lone EquipeEngenheiros {
+	c.equipeEngenheiros.t
+}
+
+fun equipePintoresDaConstrucao[ c: 
+Construcao, t: Time]: lone EquipePintores {
+	c.equipePintores.t
+}
+
+fun engenheirosDaEquipe[ e: 
+EquipeEngenheiros]: some Engenheiro {
+	e.engenheiros
+}
+
+
 --FATOS
+
+fact Funcoes{
+	all c: Construtora | 
+#contratosDaConstrutora[c] = 3
+	all c: Construtora | all t: Time | 
+#equipeDePedreirosDaConstrutora[c, t] = 4
+	all c: Construtora | 
+#equipeEngenheirosDaConstrutora[c] = 1
+	all c: Construtora | 
+#equipePintoresDaConstrutora[c] = 1
+	all c: Contrato | all t: Time | 
+#construcaoDoContrato[c, t] = 1
+	all c: Construcao | all t: Time | 
+#equipeDePedreirosDaConstrucao[c, t] = 1
+	all c: Construcao | all t: Time | 
+#equipeEngenheirosDaConstrucao[c, t] = 1 or 
+#equipeEngenheirosDaConstrucao[c, t] = 0
+	all c: Construcao  | all t: Time | 
+#equipePintoresDaConstrucao[c, t] = 1 or 
+#equipePintoresDaConstrucao[c, t] = 0
+	all e: EquipeEngenheiros | 
+#engenheirosDaEquipe[e] > 1
+
+}
+
 fact especificacoes{
-	#Contrato = 3
 	#Predio = 1
 	#CondominioPopular = 1
 	#EstadioFutebol = 1
-	#EquipePedreiros = 4
-	#Engenheiro = 2
 	#EngenheiroEletricista = 1
 	#EngenheiroCivil = 1
 	
@@ -171,6 +222,27 @@ fact especificacoes{
 	all t: Time | equipePintoresSempreTrabalha[t]
 	init[Time]
 }
+
+--Asserts
+
+assert construtoraTemTresEquipePedreiros {
+	all c: Construtora | all t: Time | #c.equipesPedreiros.t = 4
+}
+
+--check construtoraTemTresEquipePedreiros for 4
+
+assert construcaoTemSomenteUmaEquipePedreiros {
+	all c:Construcao |all t: Time | one c.equipePedreiros.t
+}
+
+--check construcaoTemSomenteUmaEquipePedreiros for 4
+
+assert equipePintoresNaoTrabalhaComEquipeEngenheiros{
+	all t: Time, c: Construcao | (#c.equipePintores.t = 1) => (#c.equipeEngenheiros.t = 0)
+}
+
+--check equipePintoresNaoTrabalhaComEquipeEngenheiros for 4
+
 
 pred show[]{}
 run show for 4
