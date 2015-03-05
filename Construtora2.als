@@ -225,17 +225,42 @@ fact especificacoes{
 
 --Asserts
 
-assert construtoraTemTresEquipePedreiros {
+assert construtoraTemQuatroEquipePedreiros {
 	all c: Construtora | all t: Time | #c.equipesPedreiros.t = 4
 }
 
---check construtoraTemTresEquipePedreiros for 4
+--check construtoraTemQuatroEquipePedreiros for 4
+
+assert construtoraTemUmaEquipeEngenheiro {
+	all c: Construtora | one c.equipeEngenheiro
+}
+
+--check construtoraTemUmaEquipeEngenheiro for 4
+
+assert construtoraTemUmaEquipePintores {
+	all c: Construtora | one c.equipePintores
+}
+
+--check construtoraTemUmaEquipePintores for 4
 
 assert construcaoTemSomenteUmaEquipePedreiros {
-	all c:Construcao |all t: Time | one c.equipePedreiros.t
+	all c: Construcao, t: Time | one c.equipePedreiros.t
 }
 
 --check construcaoTemSomenteUmaEquipePedreiros for 4
+
+
+assert construcaoTemUmaOuNenhumaEquipeDeEngenheiros{
+	all t:Time, c: Construcao | #c.equipeEngenheiros.t = 1 or #c.equipeEngenheiros.t = 0
+}
+
+--check construcaoTemUmaOuNenhumaEquipeDeEngenheiros for 4
+
+assert construcaoTemUmaOuNenhumaEquipeDePintores{
+	all t:Time, c: Construcao | #c.equipePintores.t = 1 or #c.equipePintores.t = 0
+}
+
+--check construcaoTemUmaOuNenhumaEquipeDePintores for 4
 
 assert equipePintoresNaoTrabalhaComEquipeEngenheiros{
 	all t: Time, c: Construcao | (#c.equipePintores.t = 1) => (#c.equipeEngenheiros.t = 0)
@@ -243,6 +268,19 @@ assert equipePintoresNaoTrabalhaComEquipeEngenheiros{
 
 --check equipePintoresNaoTrabalhaComEquipeEngenheiros for 4
 
+assert existePredioCondominioPopularEstadioFutebol {
+	all t: Time, cont: Contrato | some cons: Construcao | 
+	cons in cont.construcao.t and
+	(cons = Predio or cons = CondominioPopular or cons = EstadioFutebol)
+}
+
+--check existePredioCondominioPopularEstadioFutebol for 4
+
+assert todosEngenheirosTrabalhamJuntos{
+	all eq: EquipeEngenheiros, en: Engenheiro | en in eq.engenheiros
+}
+
+--check todosEngenheirosTrabalhamJuntos for 4
 
 pred show[]{}
 run show for 4
