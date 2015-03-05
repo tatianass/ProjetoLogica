@@ -57,15 +57,6 @@ pred construtoraTemTresContratos[]{
 	all c:Construtora | #c.contratos = 3
 }
 
-pred todoConstrucaoSoTemUmaEquipeDePedreirosUnica []{
-	all c1, c2: Construcao |( c1 != c2) => (c1.equipePedreiros != c2.equipePedreiros)
-}
-
-pred todaEquipeDePedreirosDaConstrucaoEstaNaConstrutora[]{
-	all c: Construtora, cons: Construcao | 
-	(cons.equipePedreiros in c.equipesPedreiros)
-}
-
 pred todaEquipeDePredeirosEstaNaConstrutora[t: Time]{
 	all c: Construtora, ep: EquipePedreiros | 
 	(ep in c.equipesPedreiros.t)
@@ -130,48 +121,39 @@ pred init[t: Time]{
 --------------------------------------------------------------------------------------
 --   FUNCOES      (Definindo as funcoes do Modelo)          (9)                  --                                                      
 --------------------------------------------------------------------------------------
-fun contratosDaConstrutora[ c: Construtora]: 
-set Contrato {
+fun contratosDaConstrutora[c: Construtora]: set Contrato {
 	c.contratos
 }
 
-fun equipeDePedreirosDaConstrutora[ c: 
-Construtora, t: Time]: set EquipePedreiros {
+fun equipeDePedreirosDaConstrutora[c: Construtora, t: Time]: set EquipePedreiros {
 	c.equipesPedreiros.t
 }
 
-fun equipeEngenheirosDaConstrutora[ c: 
-Construtora]: one EquipeEngenheiros {
+fun equipeEngenheirosDaConstrutora[c: Construtora]: one EquipeEngenheiros {
 	c.equipeEngenheiro
 }
 
-fun equipePintoresDaConstrutora[ c: 
-Construtora]: one EquipePintores {
+fun equipePintoresDaConstrutora[c: Construtora]: one EquipePintores {
 	c.equipePintores
 }
 
-fun construcaoDoContrato[ c: Contrato, t: 
-Time]: one Construcao {
+fun construcaoDoContrato[c: Contrato, t: Time]: one Construcao {
 	c.construcao.t
 }
 
-fun equipeDePedreirosDaConstrucao[ c: 
-Construcao, t: Time]: one EquipePedreiros {
+fun equipeDePedreirosDaConstrucao[c: Construcao, t: Time]: one EquipePedreiros {
 	c.equipePedreiros.t
 }
 
-fun equipeEngenheirosDaConstrucao[ c: 
-Construcao, t: Time]: lone EquipeEngenheiros {
+fun equipeEngenheirosDaConstrucao[c: Construcao, t: Time]: lone EquipeEngenheiros {
 	c.equipeEngenheiros.t
 }
 
-fun equipePintoresDaConstrucao[ c: 
-Construcao, t: Time]: lone EquipePintores {
+fun equipePintoresDaConstrucao[c: Construcao, t: Time]: lone EquipePintores {
 	c.equipePintores.t
 }
 
-fun engenheirosDaEquipe[ e: 
-EquipeEngenheiros]: some Engenheiro {
+fun engenheirosDaEquipe[e: EquipeEngenheiros]: some Engenheiro {
 	e.engenheiros
 }
 
@@ -181,26 +163,25 @@ EquipeEngenheiros]: some Engenheiro {
 
 fact Funcoes{
 	all c: Construtora | 
-#contratosDaConstrutora[c] = 3
+		#contratosDaConstrutora[c] = 3
 	all c: Construtora | all t: Time | 
-#equipeDePedreirosDaConstrutora[c, t] = 4
+		#equipeDePedreirosDaConstrutora[c, t] = 4
 	all c: Construtora | 
-#equipeEngenheirosDaConstrutora[c] = 1
+		#equipeEngenheirosDaConstrutora[c] = 1
 	all c: Construtora | 
-#equipePintoresDaConstrutora[c] = 1
+		#equipePintoresDaConstrutora[c] = 1
 	all c: Contrato | all t: Time | 
-#construcaoDoContrato[c, t] = 1
+		#construcaoDoContrato[c, t] = 1
 	all c: Construcao | all t: Time | 
-#equipeDePedreirosDaConstrucao[c, t] = 1
+		#equipeDePedreirosDaConstrucao[c, t] = 1
 	all c: Construcao | all t: Time | 
-#equipeEngenheirosDaConstrucao[c, t] = 1 or 
-#equipeEngenheirosDaConstrucao[c, t] = 0
+		#equipeEngenheirosDaConstrucao[c, t] = 1 or 
+		#equipeEngenheirosDaConstrucao[c, t] = 0
 	all c: Construcao  | all t: Time | 
-#equipePintoresDaConstrucao[c, t] = 1 or 
-#equipePintoresDaConstrucao[c, t] = 0
+		#equipePintoresDaConstrucao[c, t] = 1 or 
+		#equipePintoresDaConstrucao[c, t] = 0
 	all e: EquipeEngenheiros | 
-#engenheirosDaEquipe[e] > 1
-
+		#engenheirosDaEquipe[e] > 1
 }
 
 fact especificacoes{
@@ -211,8 +192,6 @@ fact especificacoes{
 	#EngenheiroCivil = 1
 	
 	construtoraTemTresContratos
-	todoConstrucaoSoTemUmaEquipeDePedreirosUnica
-	todaEquipeDePedreirosDaConstrucaoEstaNaConstrutora
 	todaEquipePedreirosDevePassarEmTodasConstrucoes
 	todaEquipeDeEngenheirosTem2Engenheiros
 	equipeEngenheirosPassamEmTodasConstrucoes
@@ -231,7 +210,7 @@ fact especificacoes{
 
 
 --------------------------------------------------------------------------------------
---   ASSERTS      (Definindo os asserts do Modelo)          (3)                  --                                                      
+--   ASSERTS      (Definindo os asserts do Modelo)          (9)                  --                                                      
 --------------------------------------------------------------------------------------
 
 assert construtoraTemQuatroEquipePedreiros {
@@ -292,4 +271,5 @@ assert todosEngenheirosTrabalhamJuntos{
 --check todosEngenheirosTrabalhamJuntos for 4
 
 pred show[]{}
-run show for 4
+
+run show for 6
