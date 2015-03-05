@@ -5,7 +5,7 @@ module Construtora
 sig Time {}
 
 --------------------------------------------------------------------------------------
---   ASSINATURAS      (Definindo as Assinaturas do Modelo)          (11)                  --                                                      
+--   ASSINATURAS      (Definindo as Assinaturas do Modelo)          (12)                  --                                                      
 --------------------------------------------------------------------------------------
 one abstract sig Cidade{
 	construtora: one Construtora
@@ -49,7 +49,10 @@ sig EngenheiroEletricista extends Engenheiro{}
 
 sig EngenheiroCivil extends Engenheiro{}
 
---PREDICADOS
+
+--------------------------------------------------------------------------------------
+--   PREDICADOS      (Definindo os predicados do Modelo)          (17)                  --                                                      
+--------------------------------------------------------------------------------------
 pred construtoraTemTresContratos[]{
 	all c:Construtora | #c.contratos = 3
 }
@@ -124,7 +127,9 @@ pred init[t: Time]{
 }
 
 
---Funcoes
+--------------------------------------------------------------------------------------
+--   FUNCOES      (Definindo as funcoes do Modelo)          (9)                  --                                                      
+--------------------------------------------------------------------------------------
 fun contratosDaConstrutora[ c: Construtora]: 
 set Contrato {
 	c.contratos
@@ -170,8 +175,9 @@ EquipeEngenheiros]: some Engenheiro {
 	e.engenheiros
 }
 
-
---FATOS
+--------------------------------------------------------------------------------------
+--   FATOS      (Definindo os fatos do Modelo)          (2)                  --                                                      
+--------------------------------------------------------------------------------------
 
 fact Funcoes{
 	all c: Construtora | 
@@ -223,7 +229,10 @@ fact especificacoes{
 	init[Time]
 }
 
---Asserts
+
+--------------------------------------------------------------------------------------
+--   ASSERTS      (Definindo os asserts do Modelo)          (3)                  --                                                      
+--------------------------------------------------------------------------------------
 
 assert construtoraTemTresEquipePedreiros {
 	all c: Construtora | all t: Time | #c.equipesPedreiros.t = 4
